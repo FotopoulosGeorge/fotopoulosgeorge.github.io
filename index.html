@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>George Fotopoulos - Data Science Practitioner</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #3b82f6;
+            --secondary: #1e293b;
+            --accent: #64748b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f1f5f9;
+            --gray: #94a3b8;
+            --muted: #475569;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Subtle animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 50%, var(--secondary) 100%);
+            background-size: 400% 400%;
+            animation: subtleShift 30s ease infinite;
+        }
+        
+        @keyframes subtleShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* Geometric triangles */
+        .geometry {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        .triangle {
+            position: absolute;
+            border-style: solid;
+            animation: floatTriangle 20s infinite linear;
+        }
+        
+        .triangle-1 {
+            border-width: 0 35px 60px 35px;
+            border-color: transparent transparent var(--primary) transparent;
+        }
+        
+        .triangle-2 {
+            border-width: 50px 30px 0 30px;
+            border-color: var(--accent) transparent transparent transparent;
+        }
+        
+        .triangle-3 {
+            border-width: 0 25px 43px 25px;
+            border-color: transparent transparent var(--muted) transparent;
+        }
+        
+        @keyframes floatTriangle {
+            0% { 
+                transform: translateY(100vh) rotate(0deg); 
+                opacity: 0; 
+            }
+            10% { opacity: 0.1; }
+            90% { opacity: 0.1; }
+            100% { 
+                transform: translateY(-100px) rotate(360deg); 
+                opacity: 0; 
+            }
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.1);
+        }
+        
+        nav.scrolled {
+            padding: 15px 0;
+            background: rgba(2, 6, 23, 0.95);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--light);
+            letter-spacing: -0.5px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 0.95rem;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--light);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* Sections */
+        section {
+            min-height: 100vh;
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Hero Section */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-content h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 300;
+            margin-bottom: 20px;
+            color: var(--light);
+            letter-spacing: -2px;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero-content .subtitle {
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            color: var(--gray);
+            margin-bottom: 30px;
+            font-weight: 300;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        .hero-content .description {
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto 40px;
+            color: var(--muted);
+            font-weight: 300;
+            line-height: 1.7;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+        
+        .btn {
+            padding: 12px 28px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--gray);
+            border: 1px solid var(--muted);
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
+        }
+        
+        .btn-secondary:hover {
+            color: var(--light);
+            border-color: var(--accent);
+        }
+        
+        /* Skills Section */
+        .skills {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 60px;
+            color: var(--light);
+            letter-spacing: -1px;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .skill-card {
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 8px;
+            padding: 40px 30px;
+            border: 1px solid rgba(100, 116, 139, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-5px);
+            background: rgba(30, 41, 59, 0.5);
+            border-color: rgba(100, 116, 139, 0.2);
+        }
+        
+        .skill-card i {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .skill-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--light);
+            font-weight: 400;
+        }
+        
+        .skill-card p {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        .tech-tag {
+            padding: 4px 12px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+        
+        /* Projects Section */
+        .projects {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .project-card {
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(100, 116, 139, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(100, 116, 139, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .project-header {
+            padding: 25px;
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 1px solid rgba(100, 116, 139, 0.1);
+        }
+        
+        .project-header h3 {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            color: var(--light);
+            font-weight: 400;
+        }
+        
+        .project-status {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+        
+        .project-status.production {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+        }
+        
+        .project-status.academic {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: rgba(168, 85, 247, 0.3);
+            color: #a855f7;
+        }
+        
+        .project-content {
+            padding: 25px;
+        }
+        
+        .project-description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        .project-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+        
+        .project-features li {
+            padding: 3px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+        
+        .project-features li::before {
+            content: '▸';
+            color: var(--primary);
+            font-size: 0.8rem;
+        }
+        
+        .project-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .project-link {
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .project-link.primary {
+            background: var(--primary);
+            color: white;
+            border: 1px solid var(--primary);
+        }
+        
+        .project-link.secondary {
+            background: transparent;
+            color: var(--gray);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+        }
+        
+        .project-link:hover {
+            transform: translateY(-1px);
+        }
+        
+        .project-link.primary:hover {
+            background: #2563eb;
+        }
+        
+        .project-link.secondary:hover {
+            color: var(--light);
+            border-color: var(--accent);
+        }
+        
+        /* Contact Section */
+        .contact {
+            text-align: center;
+            background: rgba(30, 41, 59, 0.2);
+            border-radius: 8px;
+            margin: 50px 20px;
+            padding: 60px 40px;
+            border: 1px solid rgba(100, 116, 139, 0.1);
+        }
+        
+        .contact h2 {
+            margin-bottom: 15px;
+        }
+        
+        .contact p {
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+        
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--gray);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(100, 116, 139, 0.1);
+        }
+        
+        .contact-link:hover {
+            background: rgba(15, 23, 42, 0.8);
+            color: var(--light);
+            transform: translateY(-2px);
+            border-color: rgba(100, 116, 139, 0.2);
+        }
+        
+        .contact-link i {
+            color: var(--primary);
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .project-card {
+                min-width: auto;
+            }
+            
+            .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Scroll animations */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation"></div>
+    <div class="geometry" id="geometry"></div>
+    
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">GF</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Predictive Analytics for Business Strategy</h1>
+            <p class="subtitle">Revenue Manager • Data Science Practitioner | Building ML solutions for business optimization</p>
+            <p class="description">
+                I combine deep business expertise with technical skills to create 
+                ML systems that drive revenue optimization and strategic decision-making.
+            </p>
+            <div class="cta-buttons">
+                <a href="#projects" class="btn btn-primary">
+                    <i class="fas fa-code"></i>
+                    View Projects
+                </a>
+                <a href="https://linkedin.com/in/george-fotopoulos-" class="btn btn-secondary">
+                    <i class="fab fa-linkedin"></i>
+                    Connect
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <h2 class="section-title scroll-reveal">Featured Projects</h2>
+        <div class="projects-grid">
+            
+            <!-- InsightStream -->
+            <div class="project-card scroll-reveal">
+                <div class="project-header">
+                    <h3>InsightStream</h3>
+                    <span class="project-status production">🚀 Deployed</span>
+                </div>
+                <div class="project-content">
+                    <p class="project-description">
+                        Complete data science platform that transforms CSV files into trained ML models 
+                        with zero coding. Features AutoML, time series forecasting, and comprehensive analytics.
+                    </p>
+                    <ul class="project-features">
+                        <li>AutoML with hyperparameter optimization</li>
+                        <li>Time series forecasting with Prophet</li>
+                        <li>Interactive data visualization and filtering</li>
+                        <li>Anomaly detection and pattern mining</li>
+                        <li>Model management and persistence</li>
+                    </ul>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Streamlit</span>
+                        <span class="tech-tag">scikit-learn</span>
+                        <span class="tech-tag">Prophet</span>
+                        <span class="tech-tag">AutoML</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://insightstream-bi.streamlit.app/" class="project-link primary">
+                            <i class="fas fa-external-link-alt"></i>
+                            Live Demo
+                        </a>
+                        <a href="https://github.com/FotopoulosGeorge/insightstream-bi" class="project-link secondary">
+                            <i class="fab fa-github"></i>
+                            Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hotel Data Generator -->
+            <div class="project-card scroll-reveal">
+                <div class="project-header">
+                    <h3>Synthetic Hotel Data Generator</h3>
+                    <span class="project-status production">🚀 Deployed</span>
+                </div>
+                <div class="project-content">
+                    <p class="project-description">
+                        Advanced synthetic data generator for hotel operations, creating realistic datasets 
+                        for testing and analysis. Perfect for revenue management and hospitality analytics.
+                    </p>
+                    <ul class="project-features">
+                        <li>Realistic booking patterns and seasonality</li>
+                        <li>Guest demographics and behavior modeling</li>
+                        <li>Revenue and pricing data generation</li>
+                        <li>Customizable parameters and export options</li>
+                        <li>Statistical validation and quality checks</li>
+                    </ul>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Streamlit</span>
+                        <span class="tech-tag">Pandas</span>
+                        <span class="tech-tag">Data Modeling</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://hotel-bookings-generator.streamlit.app" class="project-link primary">
+                            <i class="fas fa-external-link-alt"></i>
+                            Live Demo
+                        </a>
+                        <a href="https://github.com/FotopoulosGeorge/hotel-bookings-generator" class="project-link secondary">
+                            <i class="fab fa-github"></i>
+                            Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Productivity Calendar -->
+            <div class="project-card scroll-reveal">
+                <div class="project-header">
+                    <h3>Productivity Calendar</h3>
+                    <span class="project-status production">💻 Desktop App</span>
+                    <span class="project-status production">🌐 Web App</span>
+                </div>
+                <div class="project-content">
+                    <p class="project-description">
+                        Cross-platform desktop application built with Electron for enhanced productivity 
+                        and time management. Features smart scheduling and task integration.
+                    </p>
+                    <ul class="project-features">
+                        <li>Native desktop application (.exe available)</li>
+                        <li>Smart task scheduling and reminders</li>
+                        <li>Calendar integration and sync</li>
+                        <li>Productivity analytics and insights</li>
+                        <li>Offline functionality and data export</li>
+                    </ul>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Electron</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">Desktop</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://fotopoulosgeorge.github.io/productivity-calendar" class="project-link primary">
+                            <i class="fas fa-external-link-alt"></i>
+                            Live Demo
+                        </a>
+                        <a href="https://github.com/FotopoulosGeorge/productivity-calendar" class="project-link secondary">
+                            <i class="fab fa-github"></i>
+                            Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Daily Tasks App -->
+            <div class="project-card scroll-reveal">
+                <div class="project-header">
+                    <h3>Daily Tasks Web App</h3>
+                    <span class="project-status production">🌐 Web App</span>
+                </div>
+                <div class="project-content">
+                    <p class="project-description">
+                        Simple yet effective daily task management web application. Clean interface 
+                        focused on productivity and ease of use for daily workflow optimization.
+
+                    </p>
+                    <ul class="project-features">
+                        <li>Clean, minimalist task interface</li>
+                        <li>Daily workflow optimization</li>
+                        <li>Progress tracking and analytics</li>
+                        <li>Responsive web design</li>
+                        <li>Local storage and data persistence</li>
+                    </ul>
+                    <div class="tech-tags">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">HTML/CSS</span>
+                        <span class="tech-tag">Web App</span>
+                        <span class="tech-tag">UI/UX</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://fotopoulosgeorge.github.io/dailies" class="project-link primary">
+                            <i class="fas fa-external-link-alt"></i>
+                            Live Demo
+                        </a>
+                        <a href="https://github.com/FotopoulosGeorge/dailies" class="project-link secondary">
+                            <i class="fab fa-github"></i>
+                            Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sentiment Analysis -->
+            <div class="project-card scroll-reveal">
+                <div class="project-header">
+                    <h3>Sentiment Analysis System</h3>
+                    <span class="project-status academic">🎓 Academic</span>
+                </div>
+                <div class="project-content">
+                    <p class="project-description">
+                        Advanced sentiment analysis project using natural language processing techniques. 
+                        Analyzes text data to determine emotional tone and opinion classification.
+                    </p>
+                    <ul class="project-features">
+                        <li>Multi-class sentiment classification</li>
+                        <li>Text preprocessing and feature extraction</li>
+                        <li>Model comparison and evaluation</li>
+                        <li>Visualization of sentiment trends</li>
+                    </ul>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">ML</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/FotopoulosGeorge/airline-tweets-transformers-aueb-df" class="project-link secondary">
+                            <i class="fab fa-github"></i>
+                            Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Movie Recommender -->
+            <div class="project-card scroll-reveal">
+                <div class="project-header">
+                    <h3>Movie Recommendation System</h3>
+                    <span class="project-status academic">🎓 Academic</span>
+                </div>
+                <div class="project-content">
+                    <p class="project-description">
+                        Collaborative and content-based movie recommendation system. Implements multiple 
+                        algorithms to suggest personalized movie recommendations based on user preferences.
+                    </p>
+                    <ul class="project-features">
+                        <li>Collaborative filtering algorithms</li>
+                        <li>Content-based recommendation engine</li>
+                        <li>Hybrid recommendation approach</li>
+                        <li>User rating prediction and analysis</li>
+                        <li>Performance evaluation and metrics</li>
+                    </ul>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Pandas</span>
+                        <span class="tech-tag">Collaborative Filtering</span>
+                        <span class="tech-tag">ML</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/FotopoulosGeorge/movie-recommendations-aueb-df" class="project-link secondary">
+                            <i class="fab fa-github"></i>
+                            Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Degrees of Separation -->
+            <div class="project-card scroll-reveal">
+                <div class="project-header">
+                    <h3>Six Degrees of Kevin Bacon</h3>
+                    <span class="project-status academic">🎓 Academic</span>
+                </div>
+                <div class="project-content">
+                    <p class="project-description">
+                        Finds the shortest connection path between any two actors through shared movies 
+                        using BFS algorithm.
+                    </p>
+                    <ul class="project-features">
+                        <li>Shortest path algorithms</li>
+                        <li>Connection pattern analysis</li>
+
+                    </ul>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/FotopoulosGeorge/ai50-projects-2020-x-degrees" class="project-link secondary">
+                            <i class="fab fa-github"></i>
+                            Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    
+    <!-- Skills Section -->
+    <section id="skills" class="skills scroll-reveal">
+        <h2 class="section-title">Skills & Expertise</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <i class="fas fa-brain"></i>
+                <h3>Machine Learning</h3>
+                <p>End-to-end ML pipelines, AutoML, and predictive modeling</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">scikit-learn</span>
+                    <span class="tech-tag">Prophet</span>
+                    <span class="tech-tag">AutoML</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Data Science</h3>
+                <p>Statistical analysis, time series, and business intelligence</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Pandas</span>
+                    <span class="tech-tag">NumPy</span>
+                    <span class="tech-tag">Plotly</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <i class="fas fa-desktop"></i>
+                <h3>Full-Stack Development</h3>
+                <p>Web apps, desktop applications, and cloud deployment</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Streamlit</span>
+                    <span class="tech-tag">Electron</span>
+                    <span class="tech-tag">Python</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <i class="fas fa-business-time"></i>
+                <h3>Business Intelligence</h3>
+                <p>Revenue optimization and strategic data analysis</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Analytics</span>
+                    <span class="tech-tag">SQL</span>
+                    <span class="tech-tag">Excel</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact scroll-reveal">
+        <h2 class="section-title">Let's Connect</h2>
+        <p>Ready to collaborate on data science projects or discuss opportunities?</p>
+        <div class="contact-links">
+            <a href="https://linkedin.com/in/george-fotopoulos-" class="contact-link">
+                <i class="fab fa-linkedin"></i>
+                <span>LinkedIn</span>
+            </a>
+            <a href="mailto:fotopoulos.g.j@gmail.com" class="contact-link">
+                <i class="fas fa-envelope"></i>
+                <span>Email</span>
+            </a>
+            <a href="https://github.com/FotopoulosGeorge" class="contact-link">
+                <i class="fab fa-github"></i>
+                <span>GitHub</span>
+            </a>
+        </div>
+    </section>
+    
+    <script>
+        // Create geometric triangles
+        function createGeometry() {
+            const geometry = document.getElementById('geometry');
+            const triangleTypes = ['triangle-1', 'triangle-2', 'triangle-3'];
+            
+            for (let i = 0; i < 25; i++) {
+                const triangle = document.createElement('div');
+                triangle.className = `triangle ${triangleTypes[Math.floor(Math.random() * triangleTypes.length)]}`;
+                triangle.style.left = Math.random() * 100 + '%';
+                triangle.style.animationDelay = Math.random() * 20 + 's';
+                triangle.style.animationDuration = (Math.random() * 15 + 15) + 's';
+                geometry.appendChild(triangle);
+            }
+        }
+        
+        // Scroll animations
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('.scroll-reveal');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('revealed');
+                }
+            });
+        }
+        
+        // Navigation scroll effect
+        function handleNavScroll() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            createGeometry();
+            handleScrollAnimations();
+            handleNavScroll();
+        });
+        
+        // Event listeners
+        window.addEventListener('scroll', function() {
+            handleScrollAnimations();
+            handleNavScroll();
+        });
+    </script>
+</body>
+</html>
